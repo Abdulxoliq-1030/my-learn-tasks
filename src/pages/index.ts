@@ -1,1 +1,0 @@
-export {default as NewNote} from "./new-note/new-note"
