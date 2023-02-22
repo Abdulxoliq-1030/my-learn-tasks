@@ -5,6 +5,21 @@ import { NewNote } from "./pages";
 
 interface AppProps {}
 
+export type Note = {
+  id: string;
+} & NoteData;
+
+export type NoteData = {
+  title: string;
+  markdown: string;
+  tags: Tag[];
+};
+
+export type Tag = {
+  id: string;
+  label: string;
+};
+
 const App: React.FC<AppProps> = () => {
   return (
     <Container className="my-4">
