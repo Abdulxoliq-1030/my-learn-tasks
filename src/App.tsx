@@ -4,6 +4,7 @@ import { Container } from "react-bootstrap";
 import NewNote from "./new-note";
 import { useLocalStorage } from "./use-localstorage";
 import { v4 as uuidV4 } from "uuid";
+import { NoteList } from "./note-list";
 interface AppProps {}
 
 export type Note = {
@@ -64,7 +65,7 @@ const App: React.FC<AppProps> = () => {
   return (
     <Container className="my-4">
       <Routes>
-        <Route path="/" element={<h1>Home</h1>} />
+        <Route path="/" element={<NoteList availableTags={tags} />} />
         <Route
           path="/new"
           element={
