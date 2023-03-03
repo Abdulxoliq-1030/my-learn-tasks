@@ -5,7 +5,34 @@ import NewNote from "./new-note";
 
 interface AppProps {}
 
+export type Note = {
+  id: string;
+} & NoteData;
+
+export type RawNote = {
+  id: string;
+};
+
+export type RawNoteData = {
+  title: string;
+  markdown: string;
+  tagIds: string[];
+};
+
+export type NoteData = {
+  title: string;
+  markdown: string;
+  tags: Tag[];
+};
+
+export type Tag = {
+  id: string;
+  label: string;
+};
+
 const App: React.FC<AppProps> = () => {
+  const [notes, setNotes] = useLocalStorage<RawNote[]>("NOTES", []);
+  const [tags, setTags] = useLocalStorage<Tag[]>("TAGS", []);
   return (
     <Container className="my-4">
       <Routes>

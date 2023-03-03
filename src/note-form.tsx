@@ -1,15 +1,29 @@
-import React, { useRef } from "react";
+import React, { FormEvent, useRef, useState } from "react";
 import CreatableReactSelect from "react-select/creatable";
 import { Button, Col, Form, Row, Stack } from "react-bootstrap";
 import { Link } from "react-router-dom";
+import { NoteData, Tag } from "./App";
 
-interface NoteFormProps {}
+interface NoteFormProps {
+  onSubmit: (data: NoteData) => void;
+}
 
-const NoteForm: React.FC<NoteFormProps> = () => {
+const NoteForm: React.FC<NoteFormProps> = ({ onSubmit }) => {
   const titleRef = useRef<HTMLInputElement>(null);
   const markdownRef = useRef<HTMLTextAreaElement>(null);
+  const [selectedTags, setSelectedTags] = useState<Tag[]>([]);
+
+  const handleSubmit = (e: FormEvent) => {
+    e.preventDefault();
+    onSubmit({
+      title: titleRef.current!.value,
+      markdown: markdownRef.current!.value,
+      tags: [],
+    });
+  };
+
   return (
-    <Form>
+    <Form onSubmit={handleSubmit}>
       <Stack gap={4}>
         <Row>
           <Col>
@@ -21,7 +35,22 @@ const NoteForm: React.FC<NoteFormProps> = () => {
           <Col>
             <Form.Group controlId="tags">
               <Form.Label>Tags</Form.Label>
-              <CreatableReactSelect isMulti />
+              <CreatableReactSelect
+                value={selectedTags.map((tag) => {
+                  return {
+                    label: tag.label,
+                    value: tag.id,
+                  };
+                })}
+                onChange={(tags) => {
+                  setSelectedTags(
+                    tags.map((tag) => {
+                      return { label: tag.label, id: tag.value };
+                    })
+                  );
+                }}
+                isMulti
+              />
             </Form.Group>
           </Col>
         </Row>
