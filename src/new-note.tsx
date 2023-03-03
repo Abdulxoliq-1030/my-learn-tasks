@@ -1,26 +1,13 @@
 import React from "react";
-import { NoteData, Tag } from "./App";
 import NoteForm from "./note-form";
 
-interface NewNoteProps {
-  onSubmit: (data: NoteData) => void;
-  onAddTag: (tag: Tag) => void;
-  availableTags: Tag[];
-}
+interface NewNoteProps {}
 
-const NewNote: React.FC<NewNoteProps> = ({
-  onSubmit,
-  onAddTag,
-  availableTags,
-}) => {
+const NewNote: React.FC<NewNoteProps> = () => {
   return (
     <>
       <h1 className="mb-4">New Note</h1>
-      <NoteForm
-        onSubmit={onSubmit}
-        onAddTag={onAddTag}
-        availableTags={availableTags}
-      />
+      <NoteForm />
     </>
   );
 };
