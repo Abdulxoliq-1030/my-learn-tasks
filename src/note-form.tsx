@@ -54,6 +54,9 @@ const NoteForm: React.FC<NoteFormProps> = ({
                     value: tag.id,
                   };
                 })}
+                options={availableTags.map((tag) => {
+                  return { label: tag.label, value: tag.id };
+                })}
                 onChange={(tags) => {
                   setSelectedTags(
                     tags.map((tag) => {
