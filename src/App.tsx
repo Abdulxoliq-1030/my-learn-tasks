@@ -7,6 +7,7 @@ import { v4 as uuidV4 } from "uuid";
 import NoteList from "./note-list";
 import NoteLayout from "./note-layout";
 import Note from "./note";
+import EditNote from "./edit-note";
 
 interface AppProps {}
 
@@ -57,6 +58,28 @@ const App: React.FC<AppProps> = () => {
     });
   }
 
+  function onUpdateNote(id: string, { tags, ...data }: NoteData) {
+    setNotes((prev) => {
+      return prev.map((note) => {
+        if (note.id === id) {
+          return {
+            ...note,
+            ...data,
+            tagIds: tags.map((tag) => tag.id),
+          };
+        } else {
+          return note;
+        }
+      });
+    });
+  }
+
+  function onDeleteNote(id: string) {
+    setNotes((prevNotes) => {
+      return prevNotes.filter((note) => note.id !== id);
+    });
+  }
+
   function addTag(tag: Tag) {
     setTags((prev) => [...prev, tag]);
   }
@@ -79,8 +102,17 @@ const App: React.FC<AppProps> = () => {
           }
         />
         <Route path="/:id" element={<NoteLayout notes={notesWithTags} />}>
-          <Route index element={<Note />} />
-          <Route path="edit" element={<h1>Edit</h1>} />
+          <Route index element={<Note onDelete={onDeleteNote} />} />
+          <Route
+            path="edit"
+            element={
+              <EditNote
+                onSubmit={onUpdateNote}
+                onAddTag={addTag}
+                availableTags={tags}
+              />
+            }
+          />
         </Route>
         <Route path="*" element={<Navigate to="/" />} />
       </Routes>
