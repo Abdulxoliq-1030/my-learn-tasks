@@ -5,6 +5,7 @@ import NewNote from "./new-note";
 import { useLocalStorage } from "./use-local-storage";
 import { v4 as uuidV4 } from "uuid";
 import NoteList from "./note-list";
+import NoteLayout from "./note-layout";
 
 interface AppProps {}
 
@@ -76,7 +77,7 @@ const App: React.FC<AppProps> = () => {
             />
           }
         />
-        <Route path="/:id">
+        <Route path="/:id" element={<NoteLayout notes={notesWithTags} />}>
           <Route index element={<h1>Show</h1>} />
           <Route path="edit" element={<h1>Edit</h1>} />
         </Route>
