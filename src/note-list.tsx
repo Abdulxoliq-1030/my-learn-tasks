@@ -1,16 +1,38 @@
-import React, { useState } from "react";
+import React, { useMemo, useState } from "react";
 import ReactSelect from "react-select";
-import { Button, Col, Row, Stack, Form } from "react-bootstrap";
+import { Button, Col, Row, Stack, Form, Card } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import { Tag } from "./App";
+import styles from "./note-list.module.css";
+
+type SimplifiedNote = {
+  tags: Tag[];
+  title: string;
+  id: string;
+};
 
 interface NoteListProps {
   availableTags: Tag[];
+  notes: SimplifiedNote[];
 }
 
-const NoteList: React.FC<NoteListProps> = ({ availableTags }) => {
+const NoteList: React.FC<NoteListProps> = ({ availableTags, notes }) => {
   const [selectedTags, setSelectedTags] = useState<Tag[]>([]);
   const [title, setTitle] = useState("");
+
+  const filteredNotes = useMemo(() => {
+    return notes.filter((note) => {
+      return (
+        title === "" ||
+        (note.title.toLowerCase().includes(title.toLowerCase()) &&
+          (selectedTags.length === 0 ||
+            selectedTags.every((tag) =>
+              note.tags.some((noteTag) => noteTag.id === tag.id)
+            )))
+      );
+    });
+  }, [title, selectedTags, notes]);
+
   return (
     <>
       <Row className="align-items-center mb-4">
@@ -64,8 +86,26 @@ const NoteList: React.FC<NoteListProps> = ({ availableTags }) => {
           </Col>
         </Row>
       </Form>
+      <Row xs={1} sm={2} lg={3} xl={4} className="g-3">
+        {filteredNotes.map((note) => (
+          <Col key={note.id}>
+            <NoteCard id={note.id} title={note.title} tags={note.tags} />
+          </Col>
+        ))}
+      </Row>
     </>
   );
 };
 
 export default NoteList;
+
+function NoteCard({ id, title, tags }: SimplifiedNote) {
+  return (
+    <Card
+      as={Link}
+      to={`/${id}`}
+      className={`h-100 text-decoration-none ${styles.card}`}>
+      <Card.Body></Card.Body>
+    </Card>
+  );
+}
