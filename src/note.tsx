@@ -5,7 +5,11 @@ interface NoteProps {}
 
 const Note: React.FC<NoteProps> = () => {
   const note = useNote();
-  return <></>;
+  return (
+    <>
+      <h1>Hello Note</h1>
+    </>
+  );
 };
 
 export default Note;
